@@ -27,6 +27,7 @@ import { TutorialProvider } from './context/TutorialContext';
 import { PWAProvider } from './context/PWAContext';
 import { SecurityProvider } from './context/SecurityContext';
 import { AdminProvider } from './context/AdminContext';
+import { GatewayProvider } from './context/GatewayContext';
 import { WalletProvider } from './context/WalletContext';
 import './styles/index.css';
 
@@ -101,6 +102,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <ConnectivityProvider>
               <StorageProvider>
                 <AdminProvider>
+                  <GatewayProvider>
+                    <TransactionQueueProvider>
+                      <App />
+                    </TransactionQueueProvider>
+                  </GatewayProvider>
                   <TransactionQueueProvider>
                     <App />
                   </TransactionQueueProvider>

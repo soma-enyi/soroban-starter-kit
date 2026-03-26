@@ -537,6 +537,13 @@ function App(): JSX.Element {
             🛡 Admin
           </button>
           <button
+            onClick={() => setActiveTab('gateway' as any)}
+            className={(activeTab as string) === 'gateway' ? 'btn btn-primary' : 'btn btn-secondary'}
+            style={{ backgroundColor: (activeTab as string) === 'gateway' ? 'var(--color-highlight)' : 'transparent' }}
+          >
+            🔀 API Gateway
+          </button>
+          <button
             onClick={() => setActiveTab('transfer')}
             className={activeTab === 'transfer' ? 'btn btn-primary' : 'btn btn-secondary'}
             style={{ backgroundColor: activeTab === 'transfer' ? 'var(--color-highlight)' : 'transparent' }}
