@@ -10,8 +10,15 @@ resolver = "2"
 soroban-sdk = "21"
 soroban-common = { path = "contracts/common" }
 
-[workspace.metadata]
-name = "soroban-contract-templates"
-description = "Production-ready Soroban smart contract templates"
+[workspace.package]
 authors = ["Soroban Templates Contributors"]
 license = "Apache-2.0"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unused_imports = "warn"
+unused_variables = "warn"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"
