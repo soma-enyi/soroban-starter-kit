@@ -10,6 +10,12 @@ resolver = "2"
 soroban-sdk = "21"
 soroban-common = { path = "contracts/common" }
 
+[profile.release]
+opt-level = "z"
+overflow-checks = true
+lto = true
+codegen-units = 1
+
 [workspace.metadata]
 name = "soroban-contract-templates"
 description = "Production-ready Soroban smart contract templates"
