@@ -337,6 +337,9 @@ impl token::TokenInterface for TokenContract {
 
 impl TokenContract {
     fn transfer_impl(env: &Env, from: Address, to: Address, amount: i128) -> Result<(), TokenError> {
+        if from == to {
+            return Ok(());
+        }
         if amount <= 0 {
             return Err(TokenError::InvalidAmount);
         }

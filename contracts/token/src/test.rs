@@ -292,3 +292,18 @@ fn test_approve_revoke() {
         )
     );
 }
+
+#[test]
+fn test_transfer_self_is_noop() {
+    let env = Env::default();
+    env.mock_all_auths();
+    let admin = Address::generate(&env);
+    let user = Address::generate(&env);
+    let client = init_token(&env, &admin);
+    client.mint(&user, &500i128);
+
+    client.transfer(&user, &user, &200i128);
+
+    // Balance unchanged
+    assert_eq!(client.balance(&user), 500i128);
+}
