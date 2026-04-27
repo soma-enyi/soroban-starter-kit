@@ -4,7 +4,7 @@ use super::*;
 use soroban_sdk::token::TokenInterface;
 use soroban_sdk::{
     testutils::{Address as _, Events as _, Ledger as _},
-    Address, Env, IntoVal, String, Symbol,
+    Address, Env, FromVal, IntoVal, String, Symbol,
 };
 
 // ---------------------------------------------------------------------------
@@ -303,7 +303,7 @@ fn test_deadline_passed() {
     let arbiter = Address::generate(&env);
     let token_contract = create_mock_token(&env);
     let amount = 1_000i128;
-    let deadline = env.ledger().sequence() + 5;
+    let deadline = env.ledger().sequence() + 100;
 
     let (client, _) = create_escrow_contract(&env);
     client.initialize(&buyer, &seller, &arbiter, &token_contract, &amount, &deadline);
@@ -329,14 +329,14 @@ fn test_arbiter_resolve_to_seller() {
     // Verify funds_released event is present
     let all_events = env.events().all();
     let last = all_events.last().unwrap();
+    let (addr, topics, data) = last;
+    assert_eq!(addr, contract_address);
     assert_eq!(
-        last,
-        (
-            contract_address.clone(),
-            (Symbol::new(&env, "funds_released"), seller.clone()).into_val(&env),
-            amount.into_val(&env),
-        )
+        topics,
+        (Symbol::new(&env, "funds_released"), seller.clone()).into_val(&env)
     );
+    let emitted_amount = i128::from_val(&env, &data);
+    assert_eq!(emitted_amount, amount);
 }
 
 #[test]
@@ -353,14 +353,14 @@ fn test_arbiter_resolve_to_buyer() {
     // Verify funds_refunded event is present
     let all_events = env.events().all();
     let last = all_events.last().unwrap();
+    let (addr, topics, data) = last;
+    assert_eq!(addr, contract_address);
     assert_eq!(
-        last,
-        (
-            contract_address.clone(),
-            (Symbol::new(&env, "funds_refunded"), buyer.clone()).into_val(&env),
-            amount.into_val(&env),
-        )
+        topics,
+        (Symbol::new(&env, "funds_refunded"), buyer.clone()).into_val(&env)
     );
+    let emitted_amount = i128::from_val(&env, &data);
+    assert_eq!(emitted_amount, amount);
 }
 
 

@@ -154,6 +154,17 @@ impl TokenContract {
             .get(&DataKey::TotalSupply)
             .unwrap_or(0)
     }
+
+    /// Return `Some(balance)` if `id` has ever held tokens, or `None` if the
+    /// address has no storage entry (i.e. it has never received tokens).
+    ///
+    /// Use this instead of [`TokenInterface::balance`] when you need to
+    /// distinguish a genuinely unknown address from one that holds zero tokens.
+    pub fn balance_of(env: Env, id: Address) -> Option<i128> {
+        env.storage()
+            .persistent()
+            .get(&DataKey::Balance(id))
+    }
 }
 
 #[contractimpl]
@@ -200,6 +211,8 @@ impl token::TokenInterface for TokenContract {
     }
 
     fn balance(env: Env, id: Address) -> i128 {
+        // Returns 0 for both unknown addresses and addresses with a zero balance.
+        // Use `balance_of` to distinguish between the two cases.
         env.storage()
             .persistent()
             .get(&DataKey::Balance(id))
