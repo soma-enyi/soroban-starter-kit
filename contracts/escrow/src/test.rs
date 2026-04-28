@@ -4,7 +4,7 @@ use super::*;
 use soroban_sdk::token::TokenInterface;
 use soroban_sdk::{
     testutils::{Address as _, Events as _, Ledger as _},
-    Address, Env, IntoVal, String, Symbol,
+    Address, Env, FromVal, IntoVal, String, Symbol,
 };
 
 // ---------------------------------------------------------------------------
