@@ -205,6 +205,8 @@ impl token::TokenInterface for TokenContract {
     }
 
     fn balance(env: Env, id: Address) -> i128 {
+        // Returns 0 for both unknown addresses and addresses with a zero balance.
+        // Use `balance_of` to distinguish between the two cases.
         env.storage()
             .persistent()
             .get(&DataKey::Balance(id))
