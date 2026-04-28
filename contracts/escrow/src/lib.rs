@@ -332,20 +332,11 @@ impl EscrowContract {
         Ok(())
     }
 
-    /// Unpause the contract. Admin only.
-    pub fn unpause(env: Env) -> Result<(), EscrowError> {
-        let admin = require_admin(&env)?;
-        admin.require_auth();
-        env.storage().instance().set(&Paused, &false);
-        bump_instance(&env);
-        Ok(())
+    /// Return the git commit hash baked in at compile time.
+    pub fn version(env: Env) -> soroban_sdk::String {
+        soroban_sdk::String::from_str(&env, env!("GIT_HASH"))
     }
-}
 
-/// Upgrade path — only compiled when the `upgradeable` feature is enabled.
-#[cfg(feature = "upgradeable")]
-#[contractimpl]
-impl EscrowContract {
     /// Upgrade the contract to a new WASM hash. Admin only.
     pub fn upgrade(env: Env, new_wasm_hash: soroban_sdk::BytesN<32>) -> Result<(), EscrowError> {
         let admin = require_admin(&env)?;
